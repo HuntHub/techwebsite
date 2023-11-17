@@ -1,0 +1,59 @@
+.main-navbar {
+    position: fixed;
+    background-color: #009bed; /* Choose a background color that fits your design */
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+  
+.main-navbar .website-name {
+    font-weight: bold;
+    /* Additional styling */
+  }
+  
+.main-navbar .navbar-links a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    /* Additional styling */
+}
+  
+  /* Style adjustments for your category nav if needed */
+.category-nav {
+    /* Your category nav styles */
+}
+  
+.powered-by-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-right: 20px;
+    flex-shrink: 0;
+    box-sizing: border-box;
+}
+  
+.powered-by-text {
+    margin-right: 8px; /* Adjust the spacing as needed */
+    color: #ffffff; /* Choose a color that fits the navbar */
+    font-size: 0.8em; /* Adjust the font size as needed */
+}
+  
+.best-buy-logo-container img {
+    height: 40px; /* Or whatever size you prefer */
+    width: auto;
+ }
+  
+  /* To prevent overlap with your main navbar */
+.App > header {
+    padding-top: 70px; /* Adjust this value to the height of your main navbar */
+}
+
+.websitelogo {
+    height: 100px;
+    width: auto;
+}
