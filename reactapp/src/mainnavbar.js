@@ -14,6 +14,9 @@ const MainNavBar = () => {
             {/* Insert links below */}
             <a href="/maxbudgetcalculator">Max Budget Build </a>
         </div>
+        <div className='website-title'>
+        <h1>Active Deals</h1>
+        </div>
         <div className="powered-by-container">
           <span className="powered-by-text">Powered by:</span>
           <a href="https://developer.bestbuy.com" className="best-buy-logo-container">

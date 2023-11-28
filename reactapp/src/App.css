@@ -45,17 +45,17 @@
   margin: auto;
 }
 
-.categories {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-}
-
 .category-container {
   border: 0px solid #ccc;
   padding: 0px;
   position: relative;
   display: inline-block;
+  margin-top: 0px;
+}
+
+.category-navbar {
+  margin-top: 104px;
+  position: sticky;
 }
 
 .products-scrollable {

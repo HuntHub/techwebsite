@@ -10,11 +10,11 @@ const affiliateBaseUrl = 'https://www.youraffiliateprogram.com';
 
 // Initialize database connection pool
 const pool = mysql.createPool({
-    host: '10.0.0.31',
+    host: 'techwebsite-db.cwormt0yk8s3.us-east-1.rds.amazonaws.com',
     port: '3306',
-    user: 'root',
+    user: 'admin',
     password: 'password',
-    database: 'test_database',
+    database: 'techwebsite',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0

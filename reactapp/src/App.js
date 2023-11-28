@@ -76,8 +76,7 @@ function App() {
     <div className="App">
       <MainNavBar />
       <header>
-        <h1>Active Deals</h1>
-        <nav>
+        <nav className="category-navbar">
           {categories.map((category) => (
             <div 
               key={category.tableName}

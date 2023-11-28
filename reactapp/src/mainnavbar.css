@@ -2,30 +2,21 @@
     position: fixed;
     background-color: #009bed; /* Choose a background color that fits your design */
     color: white;
-    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100vw;
     margin: 0 auto;
     box-sizing: border-box;
+    top: 0;
+    z-index: 10000;
 }
-  
-.main-navbar .website-name {
-    font-weight: bold;
-    /* Additional styling */
-  }
   
 .main-navbar .navbar-links a {
     color: white;
     margin-left: 20px;
     text-decoration: none;
     /* Additional styling */
-}
-  
-  /* Style adjustments for your category nav if needed */
-.category-nav {
-    /* Your category nav styles */
 }
   
 .powered-by-container {
@@ -50,10 +41,17 @@
   
   /* To prevent overlap with your main navbar */
 .App > header {
-    padding-top: 70px; /* Adjust this value to the height of your main navbar */
+    padding-top: 0px; /* Adjust this value to the height of your main navbar */
 }
 
 .websitelogo {
     height: 100px;
     width: auto;
+}
+
+.website-title {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
