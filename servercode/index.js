@@ -6,20 +6,28 @@ const axios = require('axios');
 const mysql = require('mysql2/promise');
 const cron = require('node-cron');
 
-const affiliateBaseUrl = 'https://www.youraffiliateprogram.com';
+//Declare env vars
+require('dotenv').config();
+const dbHost = process.env.DB_HOST;
+const dbUser = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+const bbapiKey = process.env.BB_API_KEY;
+const corsdomains = JSON.parse(process.env.CORS_DOMAINS);
+const affiliateBaseUrl = process.env.affiliateBaseUrl;
 
 // Initialize database connection pool
 const pool = mysql.createPool({
-    host: 'techwebsite-db.cwormt0yk8s3.us-east-1.rds.amazonaws.com',
+    host: dbHost,
     port: '3306',
-    user: 'admin',
-    password: 'password',
+    user: dbUser,
+    password: dbPassword,
     database: 'techwebsite',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
 
+//Declare categories and subcategories
 const categories = [
 
     { categoryId: 'abcat0507000', tableName: 'products_table_1', subcategories: [] },
@@ -63,18 +71,22 @@ const categories = [
 
 ];
 
-// Middleware to parse JSON bodies
+// Middleware to parse JSON data
 app.use(express.json());
 
-// Enable CORS for your React app domain
+// Enable CORS for React app domain
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: [corsdomains]
 }));
+
+app.get('/health', (res) => {
+    res.status(200).send('OK');
+});
 
 // Function to fetch from Best Buy and insert into the database
 async function fetchAndStoreCategory(categoryId, tableName) {
   try {
-    const response = await axios.get(`https://api.bestbuy.com/v1/products(categoryPath.id=${categoryId})?format=json&show=sku,name,salePrice,onSale,percentSavings,dollarSavings,regularPrice,largeFrontImage&sort=percentSavings.desc&pageSize=20&apiKey=Q8HG6JekWypXbqYiGLvC1Tjp`);
+    const response = await axios.get(`https://api.bestbuy.com/v1/products(categoryPath.id=${categoryId})?format=json&show=sku,name,salePrice,onSale,percentSavings,dollarSavings,regularPrice,largeFrontImage,url&sort=percentSavings.desc&pageSize=20&apiKey=${bbapiKey}`);
     const products = response.data.products;
 
     // Start a transaction
@@ -89,7 +101,7 @@ async function fetchAndStoreCategory(categoryId, tableName) {
       for (const product of products) {
 
         const imageUrl = product.largeFrontImage;
-        const affiliateLink = `${affiliateBaseUrl}?id=${product.sku}`;
+        const affiliateLink = product.url;
 
         await connection.query(`
           INSERT INTO ?? (sku, name, salePrice, onSale, percentSavings, dollarSavings, regularPrice, imageUrl, affiliateLink) 
@@ -129,6 +141,7 @@ async function fetchAndStoreCategory(categoryId, tableName) {
     }
 }
 
+//Function to find categories
 function findCategoryByTableName(tableName) {
     let foundCategory = null;
 
@@ -150,7 +163,7 @@ function findCategoryByTableName(tableName) {
 }
 
 // Endpoint to fetch from Best Buy and insert into the database
-app.get('/fetch-and-store', async (req, res) => {
+app.get('/fetch-and-store', async (res) => {
   try {
         const message = await fetchAndStoreCategory();
         res.json({ message });
@@ -205,7 +218,7 @@ app.get('/products/:tableName', async (req, res) => {
   });
 
 // Endpoint to retrieve products from all tables in the database
-app.get('/products/all', async (req, res) => {
+app.get('/products/all', async (res) => {
     try {
       const allProducts = {};
       for (const category of categories) {
@@ -225,7 +238,7 @@ app.listen(port, () => {
 });
 
 // Schedule tasks to be run on the server.
-cron.schedule('0 * * * * *', async () => {
+cron.schedule('0 0 0 12 * *', async () => {
     console.log('Running task 1');
     try {
         const message = await fetchAndStoreCategory(categories[0].categoryId, categories[0].tableName);
@@ -236,7 +249,7 @@ cron.schedule('0 * * * * *', async () => {
     }
 });
 
-cron.schedule('2 * * * * *', async () => {
+cron.schedule('2 0 0 12 * *', async () => {
     console.log('Running task 2');
     try {
         const message = await fetchAndStoreCategory(categories[1].categoryId, categories[1].tableName);
@@ -247,7 +260,7 @@ cron.schedule('2 * * * * *', async () => {
     }
 });
 
-cron.schedule('4 * * * * *', async () => {
+cron.schedule('4 0 0 12 * *', async () => {
     console.log('Running task 3');
     try {
         const message = await fetchAndStoreCategory(categories[2].categoryId, categories[2].tableName);
@@ -258,7 +271,7 @@ cron.schedule('4 * * * * *', async () => {
     }
 });
 
-cron.schedule('6 * * * * *', async () => {
+cron.schedule('6 0 0 12 * *', async () => {
     console.log('Running task 4');
     try {
         const message = await fetchAndStoreCategory(categories[3].categoryId, categories[3].tableName);
@@ -269,7 +282,7 @@ cron.schedule('6 * * * * *', async () => {
     }
 });
 
-cron.schedule('8 * * * * *', async () => {
+cron.schedule('8 0 0 12 * *', async () => {
     console.log('Running task 5');
     try {
         const message = await fetchAndStoreCategory(categories[4].categoryId, categories[4].tableName);
@@ -280,7 +293,7 @@ cron.schedule('8 * * * * *', async () => {
     }
 });
 
-cron.schedule('10 * * * * *', async () => {
+cron.schedule('10 0 0 12 * *', async () => {
     console.log('Running task 6');
     try {
         const message = await fetchAndStoreCategory(categories[5].categoryId, categories[5].tableName);
@@ -291,7 +304,7 @@ cron.schedule('10 * * * * *', async () => {
     }
 });
 
-cron.schedule('12 * * * * *', async () => {
+cron.schedule('12 0 0 12 * *', async () => {
     console.log('Running task 7');
     try {
         const message = await fetchAndStoreCategory(categories[6].categoryId, categories[6].tableName);
@@ -302,7 +315,7 @@ cron.schedule('12 * * * * *', async () => {
     }
 });
 
-cron.schedule('14 * * * * *', async () => {
+cron.schedule('14 0 0 12 * *', async () => {
     console.log('Running task 8');
     try {
         const message = await fetchAndStoreCategory(categories[7].categoryId, categories[7].tableName);
@@ -313,10 +326,10 @@ cron.schedule('14 * * * * *', async () => {
     }
 });
 
-cron.schedule('16 * * * * *', async () => {
+cron.schedule('16 0 0 12 * *', async () => {
     console.log('Running task 9');
     try {
-        const subcategory = findCategoryByTableName('products_table_9');
+        const subcategory = findCategoryByTableName('products_table_9'); //We use our second function to find the subcategory in a given category
         if (subcategory) {
             const message = await fetchAndStoreCategory(subcategory.categoryId, subcategory.tableName);
             console.log(message);
@@ -329,7 +342,7 @@ cron.schedule('16 * * * * *', async () => {
     }
 });
 
-cron.schedule('18 * * * * *', async () => {
+cron.schedule('18 0 0 12 * *', async () => {
     console.log('Running task 10');
     try {
         const subcategory = findCategoryByTableName('products_table_10');
@@ -345,7 +358,7 @@ cron.schedule('18 * * * * *', async () => {
     }
 });
 
-cron.schedule('20 * * * * *', async () => {
+cron.schedule('20 0 0 12 * *', async () => {
     console.log('Running task 11');
     try {
         const subcategory = findCategoryByTableName('products_table_11');
@@ -361,7 +374,7 @@ cron.schedule('20 * * * * *', async () => {
     }
 });
 
-cron.schedule('22 * * * * *', async () => {
+cron.schedule('22 0 0 12 * *', async () => {
     console.log('Running task 12');
     try {
         const subcategory = findCategoryByTableName('products_table_12');
@@ -377,7 +390,7 @@ cron.schedule('22 * * * * *', async () => {
     }
 });
 
-cron.schedule('24 * * * * *', async () => {
+cron.schedule('24 0 0 12 * *', async () => {
     console.log('Running task 13');
     try {
         const subcategory = findCategoryByTableName('products_table_13');
@@ -393,7 +406,7 @@ cron.schedule('24 * * * * *', async () => {
     }
 });
 
-cron.schedule('26 * * * * *', async () => {
+cron.schedule('26 0 0 12 * *', async () => {
     console.log('Running task 14');
     try {
         const subcategory = findCategoryByTableName('products_table_14');
@@ -408,7 +421,7 @@ cron.schedule('26 * * * * *', async () => {
         console.error('Error in scheduled fetch-and-store task:', error);
     }
 });
-cron.schedule('28 * * * * *', async () => {
+cron.schedule('28 0 0 12 * *', async () => {
     console.log('Running task 15');
     try {
         const subcategory = findCategoryByTableName('products_table_15');
@@ -424,7 +437,7 @@ cron.schedule('28 * * * * *', async () => {
     }
 });
 
-cron.schedule('30 * * * * *', async () => {
+cron.schedule('30 0 0 12 * *', async () => {
     console.log('Running task 16');
     try {
         const subcategory = findCategoryByTableName('products_table_16');
@@ -440,7 +453,7 @@ cron.schedule('30 * * * * *', async () => {
     }
 });
 
-cron.schedule('32 * * * * *', async () => {
+cron.schedule('32 0 0 12 * *', async () => {
     console.log('Running task 17');
     try {
         const subcategory = findCategoryByTableName('products_table_17');
@@ -456,7 +469,7 @@ cron.schedule('32 * * * * *', async () => {
     }
 });
 
-cron.schedule('34 * * * * *', async () => {
+cron.schedule('34 0 0 12 * *', async () => {
     console.log('Running task 18');
     try {
         const subcategory = findCategoryByTableName('products_table_18');
@@ -472,7 +485,7 @@ cron.schedule('34 * * * * *', async () => {
     }
 });
 
-cron.schedule('36 * * * * *', async () => {
+cron.schedule('36 0 0 12 * *', async () => {
     console.log('Running task 19');
     try {
         const subcategory = findCategoryByTableName('products_table_19');
@@ -488,7 +501,7 @@ cron.schedule('36 * * * * *', async () => {
     }
 });
 
-cron.schedule('38 * * * * *', async () => {
+cron.schedule('38 0 0 12 * *', async () => {
     console.log('Running task 20');
     try {
         const subcategory = findCategoryByTableName('products_table_20');
@@ -504,7 +517,7 @@ cron.schedule('38 * * * * *', async () => {
     }
 });
 
-cron.schedule('40 * * * * *', async () => {
+cron.schedule('40 0 0 12 * *', async () => {
     console.log('Running task 21');
     try {
         const subcategory = findCategoryByTableName('products_table_21');
@@ -520,7 +533,7 @@ cron.schedule('40 * * * * *', async () => {
     }
 });
 
-cron.schedule('42 * * * * *', async () => {
+cron.schedule('42 0 0 12 * *', async () => {
     console.log('Running task 22');
     try {
         const subcategory = findCategoryByTableName('products_table_22');

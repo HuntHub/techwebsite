@@ -55,3 +55,38 @@
     justify-content: center;
     align-items: center;
 }
+
+@media (max-width: 768px) {
+    .main-navbar {
+        /* Adjust navbar styles for mobile */
+        padding: 10px 15px; /* Example: add padding */
+        height: 75px;
+    }
+
+    .main-navbar .navbar-links a {
+        margin-left: 10px; /* Reduce margin between links */
+        font-size: 0.9em; /* Reduce font size */
+    }
+
+    .powered-by-container {
+        margin-right: 10px; /* Reduce margin on the right */
+    }
+
+    .powered-by-text {
+        font-size: 0.7em; /* Reduce font size */
+    }
+
+    .best-buy-logo-container img {
+        height: 30px; /* Reduce logo size */
+    }
+
+    .websitelogo {
+        height: 70px; /* Reduce logo size in navbar */
+    }
+
+    .website-title {
+        font-size: 0.7em; /* Reduce title font size */
+        padding: 0 10px; /* Add padding to prevent text touching the edges */
+    }
+
+}

@@ -11,16 +11,17 @@ const MainNavBar = () => {
             <img src={logo} alt="Logo" className="websitelogo" />
         </div>
         <div className="navbar-links">
-            {/* Insert links below */}
+            {/* Hide link until ready
             <a href="/maxbudgetcalculator">Max Budget Build </a>
+             */}
         </div>
         <div className='website-title'>
-        <h1>Active Deals</h1>
+        <h1>Max Budget Builds</h1>
         </div>
         <div className="powered-by-container">
           <span className="powered-by-text">Powered by:</span>
           <a href="https://developer.bestbuy.com" className="best-buy-logo-container">
-            <img src="https://developer.bestbuy.com/images/bestbuy-logo.png" alt="Best Buy Developer API" className="best-buy-logo" />
+            <img src="https://developer.bestbuy.com/images/bestbuy-logo.png" alt="Best Buy Developer API" className="best-buy-logo" /> {/* Required for Best Buy API approval*/}
           </a>
         </div>
       </div>

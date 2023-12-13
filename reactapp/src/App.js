@@ -51,10 +51,12 @@ function App() {
 
   ];
 
+const ALB_ENDPOINT = 'https://api.maxbudgetbuilds.com'
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/products/${selectedCategory}`);
+        const response = await axios.get(`${ALB_ENDPOINT}/products/${selectedCategory}`);
         setProducts(response.data);
       } catch (error) {
         console.error(`Error fetching products for ${selectedCategory}:`, error);

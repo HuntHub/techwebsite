@@ -21,3 +21,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+client
+ec2-user@3.239.28.86
+myapp.tar.gz
+server
+servercode/.env
+terraform/.terraform/
+terraform/.terraform*
+terraform/terraform.tfstate*
