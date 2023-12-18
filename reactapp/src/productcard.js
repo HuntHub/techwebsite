@@ -1,6 +1,9 @@
 import React from 'react';
 import './productcard.css'
 
+// Renders a product card for each product sent via the product prop
+
+// Destructuring of product prop to access specific product properties and render them in the UI
 const ProductCard = ({ product }) => {
     return (
       <div className="product-card">
